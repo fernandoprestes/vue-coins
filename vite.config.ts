@@ -16,12 +16,4 @@ export default defineConfig({
       '~/': `${PATH_SRC}/`,
     },
   },
-
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `@import "./src/styles/settings/_index.scss";`,
-      },
-    },
-  },
 });
