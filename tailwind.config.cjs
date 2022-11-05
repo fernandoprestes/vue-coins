@@ -7,6 +7,13 @@ module.exports = {
       center: true,
     },
     extend: {
+      colors: {
+        background: '#181A25',
+      },
+      backgroundImage: {
+        'green-gradient':
+          'linear-gradient(135deg, rgb(66, 211, 146) 5%, rgb(100, 126, 255))',
+      },
       fontSize: {
         'display-2xl': ['4.5rem', 1],
         'display-xl': ['3.75rem', 1],

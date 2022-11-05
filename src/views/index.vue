@@ -1,7 +1,11 @@
-<script lang="ts" setup></script>
+<script setup lang="ts">
+  import CardCoinList from '~/components/CardCoinList.vue';
+  import TheHeader from '~/components/TheHeader.vue';
+</script>
 
 <template>
-  <main>
-    <h1>Hello World</h1>
+  <main class="h-screen w-full bg-background pt-8 text-white">
+    <TheHeader />
+    <CardCoinList />
   </main>
 </template>
