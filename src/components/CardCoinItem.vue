@@ -1,7 +1,9 @@
 <script lang="ts" setup>
   import { ref, watchEffect } from 'vue';
-
   import { currencyFormatter } from '~/composables/useFormatter';
+
+  import useDialog from '~/composables/useDialog';
+  const { open } = useDialog();
 
   interface Props {
     coinName: string;
@@ -14,10 +16,17 @@
   watchEffect(async () => {
     imgUrl.value = (await import(/* @vite-ignore */ `../assets/img/${props.coinName}.png`)).default;
   });
+
+  function handleOpenDialog() {
+    open({ component: 'DialogHistoricCoin', props: { id: props.coinName } });
+  }
 </script>
 
 <template>
-  <div class="flex min-w-[240px] flex-1 flex-col space-y-2 rounded-lg border border-gray-700 px-4 py-3">
+  <div
+    class="flex min-w-[240px] flex-1 cursor-pointer flex-col space-y-2 rounded-lg border border-gray-700 px-4 py-3 hover:border-gray-500"
+    @click="handleOpenDialog"
+  >
     <div class="flex items-center gap-4">
       <img
         class="h-8 w-8"
