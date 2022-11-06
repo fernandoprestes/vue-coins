@@ -1,0 +1,95 @@
+<script lang="ts" setup>
+  import { inject, onMounted, reactive } from 'vue';
+  import type CoinsService from '~/services/CoinsService';
+  import { currencyFormatter } from '~/composables/useFormatter';
+
+  const coinsService = inject('coinsService') as CoinsService;
+
+  const query = `vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false`;
+
+  interface ICoinsList {
+    marketCapRank: number;
+    image: string;
+    name: string;
+    symbol: string;
+    currentPrice: number;
+    priceChangePercentage24h: number;
+  }
+
+  const state = reactive({
+    coins: [] as ICoinsList[],
+  });
+
+  onMounted(async () => {
+    const response = await coinsService.getCoinsMarketsList(query);
+    response.map((item: any) => {
+      state.coins.push({
+        marketCapRank: item.market_cap_rank,
+        image: item.image,
+        name: item.name,
+        symbol: item.symbol,
+        currentPrice: item.current_price,
+        priceChangePercentage24h: item.price_change_percentage_24h,
+      });
+    });
+  });
+
+  function isPositive(item: number) {
+    return item > 0;
+  }
+</script>
+
+<template>
+  <div class="md-py-4 mx-auto max-w-[1330px] px-4 md:py-4 md:px-0">
+    <h2 class="bg-green-gradient bg-clip-text py-4 text-display-xs font-bold text-transparent">
+      Tabela de preços das criptomoeda por capitalização de mercado
+    </h2>
+    <div class="flex max-h-[520px] min-h-[500px] w-full flex-1 flex-col rounded-md border border-gray-600 p-4">
+      <div class="overflow-auto">
+        <table class="relative h-full w-full border-collapse">
+          <thead class="sticky top-0 bg-background">
+            <tr
+              class="grid grid-flow-col grid-cols-[_0.1fr,_0.5fr,_0.4fr] border-b border-gray-600 py-4 font-bold md:grid-cols-[80px,repeat(2,minmax(175px,_1fr)),150px]"
+            >
+              <td></td>
+              <td>Moeda</td>
+              <td>Preço (US$)</td>
+              <td class="hidden text-center md:block">24h (%)</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(item, index) in state.coins"
+              :key="index"
+              class="my-4 grid grid-flow-col grid-cols-[_0.1fr,_0.5fr,_0.4fr] items-center md:grid-cols-[80px,repeat(2,minmax(175px,_1fr)),150px]"
+            >
+              <td>{{ item.marketCapRank }}</td>
+              <td class="flex items-center gap-4">
+                <img
+                  class="h-6 w-6"
+                  :src="item.image"
+                  :alt="item.name"
+                />
+                <div>
+                  {{ item.name }}
+                  <span class="rounded-md bg-slate-400 px-2 text-xs font-thin uppercase">
+                    {{ item.symbol }}
+                  </span>
+                </div>
+              </td>
+              <td class="pr-4 text-right md:pr-0 md:text-left">
+                US$ {{ currencyFormatter(item.currentPrice.toString(), 'USD', 4) }}
+              </td>
+              <td
+                class="hidden text-center md:block"
+                :class="[isPositive(item.priceChangePercentage24h) ? 'text-green-400' : 'text-red-400']"
+              >
+                {{ item.priceChangePercentage24h.toFixed(4) }} %
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</template>
