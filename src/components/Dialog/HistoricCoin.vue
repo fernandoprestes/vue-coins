@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { inject, onMounted, reactive, watch } from 'vue';
+  import { inject, onMounted, reactive, ref, watch } from 'vue';
   import { currencyFormatter } from '~/composables/useFormatter';
   import type CoinsService from '~/services/CoinsService';
 
@@ -10,9 +10,11 @@
   }
   const props = defineProps<Props>();
 
+  const currencyMessage = ref('...carregando');
+
   const state = reactive({
-    isLoading: true,
-    teste: '',
+    isLoadingContent: true,
+    isValidDateRange: true,
     date: new Date().toLocaleString('pt-BR', { dateStyle: 'short' }).replaceAll('/', '-'),
     inputDateSearch: new Date()
       .toLocaleString('pt-BR', { dateStyle: 'short' })
@@ -31,38 +33,50 @@
     },
   });
 
-  async function findOneCoinHisticalBtDate() {
-    state.isLoading = true;
+  async function findOneCoinHisticalByDate() {
+    state.isLoadingContent = true;
     const { name, symbol, image, market_data } = await coinsService.getCoinsHistoricalByDate(props.data.id, state.date);
     state.coin.name = name;
     state.coin.symbol = symbol;
     state.coin.image = image.small;
     state.coin.current_price.brl = market_data.current_price.brl;
     state.coin.current_price.usd = market_data.current_price.usd;
-    state.isLoading = false;
+    state.isLoadingContent = false;
+  }
+
+  async function updateCurrentPrice() {
+    state.isValidDateRange = false;
+    const { market_data } = await coinsService.getCoinsHistoricalByDate(props.data.id, state.date);
+    state.coin.current_price.brl = market_data.current_price.brl;
+    state.coin.current_price.usd = market_data.current_price.usd;
+    state.isValidDateRange = true;
   }
 
   watch(
     () => state.inputDateSearch,
     () => {
+      currencyMessage.value = '...carregando';
       if (!state.inputDateSearch) return;
+      if (new Date(state.inputDateSearch).toISOString() > new Date().toISOString()) {
+        currencyMessage.value = 'Data invalida';
+        state.isValidDateRange = false;
+        return;
+      }
       const newDate = state.inputDateSearch.toString().split('-').reverse().join('-');
-      const currentDate = new Date().toLocaleString('pt-BR', { dateStyle: 'short' }).replaceAll('/', '-');
-      if (newDate > currentDate) return;
       state.date = newDate;
-      findOneCoinHisticalBtDate();
+      updateCurrentPrice();
     },
   );
 
   onMounted(async () => {
-    await findOneCoinHisticalBtDate();
-    state.isLoading = false;
+    await findOneCoinHisticalByDate();
+    state.isLoadingContent = false;
   });
 </script>
 
 <template>
   <div
-    v-if="state.isLoading"
+    v-if="state.isLoadingContent"
     class="flex-1"
   >
     ...carregando
@@ -82,7 +96,16 @@
         <span class="text-xl font-thin">{{ state.coin.symbol }}</span>
       </div>
     </div>
-    <div class="flex flex-col">
+    <div
+      v-if="!state.isValidDateRange"
+      class="flex flex-1 items-center justify-center"
+    >
+      {{ currencyMessage }}
+    </div>
+    <div
+      v-else
+      class="flex flex-col"
+    >
       <div class="flex justify-between text-lg">
         R$ <span> {{ currencyFormatter(state.coin.current_price.brl.toString(), 'BRL') }}</span>
       </div>

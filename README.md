@@ -11,6 +11,8 @@
 - [Eslint-plugin-vue](https://eslint.vuejs.org/)
 - [Prettier](https://prettier.io/)
 - [husky](https://typicode.github.io/husky/#/)
+- [Animate.css](https://animate.style/)
+- [CoinGecko](https://www.coingecko.com/pt/api/documentation)
 
 ### Ferramentas recomendadas
 

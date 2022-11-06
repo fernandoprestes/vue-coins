@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { defineAsyncComponent, onBeforeUnmount, onMounted, reactive } from 'vue';
   import useDialog from '~/composables/useDialog';
+  import 'animate.css';
 
   const DialogHistoricCoin = defineAsyncComponent(() => import('./HistoricCoin.vue'));
 
@@ -44,13 +45,13 @@
   <teleport to="body">
     <div
       v-if="state.isActive && componentsInstance[state.component]"
-      class="fixed inset-0 z-50 flex h-full w-full items-center justify-center bg-slate-800/50"
+      class="fixed inset-0 z-50 flex h-full w-full items-center justify-center bg-slate-800/60"
       @click="handleModalToggle({ status: false, component: '', props: {} })"
     >
       <div @click.stop>
         <div class="flex items-center justify-center">
           <div
-            class="ite fixed flex min-h-[288px] min-w-[320px] flex-col overflow-hidden rounded-lg bg-slate-100 px-6 py-8"
+            class="animate__animated animate__fadeIn fixed flex min-h-[288px] min-w-[320px] flex-col overflow-hidden rounded-lg bg-slate-100 px-6 py-8"
           >
             <component
               :is="componentsInstance[state.component]"

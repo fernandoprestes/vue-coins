@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <main class="h-screen w-full bg-background pt-8 text-white">
+  <main class="h-screen w-full bg-background pt-8 text-white md:px-8">
     <TheHeader />
     <CardCoinList />
   </main>

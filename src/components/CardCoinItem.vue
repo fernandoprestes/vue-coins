@@ -37,10 +37,10 @@
       <h2 class="text-2xl capitalize">{{ coinName.replaceAll('-', ' ') }}</h2>
     </div>
     <div class="flex flex-col font-bold">
-      <div class="flex justify-between text-xl">
+      <div class="flex gap-8 text-xl md:justify-between">
         R$ <span>{{ currencyFormatter(coinCurrencyBrl.toString(), 'BRL') }}</span>
       </div>
-      <div class="flex justify-between text-lg">
+      <div class="flex gap-8 text-lg md:justify-between">
         US$ <span>{{ currencyFormatter(coinCurrencyUsd.toString(), 'USD') }}</span>
       </div>
     </div>
