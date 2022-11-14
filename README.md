@@ -1,5 +1,17 @@
 # VueCoins
 
+Este projeto é uma aplicação que mostra o preços da criptomoeda usando a API [CoinGenko](https://www.coingecko.com/pt/api/documentation).
+
+- [x] No topo abaixo do header conter 7 cards listado as moedas bitcoin, cardano, dacxi, ethereum, polkadoor, solana e terra luna 2 em reais e dólar.
+- [x] Ao pressionar um dos cards abrir modal para filtra por data a cotação em real e dólar da moeda.
+- [x] Lista em uma tabela o nome, o preço a a variação (%) das 50 moedas por capitalização
+
+## Screenshots
+
+<img src='./public/screenshot/full-screen.png' alt="tela principal">
+
+<img src='./public/screenshot/modal.png' alt="exibição do modal">
+
 ## Tecnologias
 
 - [Vite](https://vitejs.dev/)
