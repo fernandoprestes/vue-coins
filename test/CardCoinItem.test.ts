@@ -4,11 +4,17 @@ import { shallowMount } from '@vue/test-utils';
 import CardCoinItem from '~/components/CardCoinItem.vue';
 
 describe('CardCoinItem', () => {
+  const cardItem = {
+    id: '1234',
+    coinName: 'bitcoin',
+    currencies: {
+      usd: 1.225413,
+      brl: 5.658745,
+    },
+  };
   const wrapper = shallowMount(CardCoinItem, {
     propsData: {
-      coinName: 'bitcoin',
-      coinCurrencyBrl: 5.658745,
-      coinCurrencyUsd: 1.225413,
+      coin: cardItem,
     },
   });
 
