@@ -1,13 +1,15 @@
 <script lang="ts" setup>
-  import { inject, onMounted, reactive } from 'vue';
+  import { inject, onMounted, onUnmounted, reactive } from 'vue';
   import type CoinsService from '~/services/CoinsService';
   import { currencyFormatter } from '~/composables/useFormatter';
+  import type { ICoinMarketList } from '~/@types/ICoinMarketList';
 
   const coinsService = inject('coinsService') as CoinsService;
 
   const query = `vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false`;
 
   interface ICoinsList {
+    id: string;
     marketCapRank: number;
     image: string;
     name: string;
@@ -16,14 +18,19 @@
     priceChangePercentage24h: number;
   }
 
+  const MILI_SEC = 60000 * 5; // 5 minutes;
+
   const state = reactive({
     coins: [] as ICoinsList[],
   });
 
-  onMounted(async () => {
+  const isPositive = (item: number) => item > 0;
+
+  const fetchCoinsList = async () => {
     const response = await coinsService.getCoinsMarketsList(query);
-    response.map((item: any) => {
+    response.map((item: ICoinMarketList) => {
       state.coins.push({
+        id: item.id,
         marketCapRank: item.market_cap_rank,
         image: item.image,
         name: item.name,
@@ -32,11 +39,30 @@
         priceChangePercentage24h: item.price_change_percentage_24h,
       });
     });
+  };
+
+  const updateCoinsList = async () => {
+    const response = await coinsService.getCoinsMarketsList(query);
+    response.forEach((item: ICoinMarketList, index: number) => {
+      if (item.id === state.coins[index].id) {
+        state.coins[index] = {
+          ...state.coins[index],
+          currentPrice: item.current_price,
+          priceChangePercentage24h: item.price_change_percentage_24h,
+        };
+      }
+    });
+  };
+
+  const updateCoinsListPrice = setInterval(updateCoinsList, MILI_SEC);
+
+  onMounted(async () => {
+    await fetchCoinsList();
   });
 
-  function isPositive(item: number) {
-    return item > 0;
-  }
+  onUnmounted(() => {
+    clearInterval(updateCoinsListPrice);
+  });
 </script>
 
 <template>
@@ -78,13 +104,26 @@
                 </div>
               </td>
               <td class="pr-4 text-right md:pr-0 md:text-left">
-                US$ {{ currencyFormatter(item.currentPrice.toString(), 'USD', 4) }}
+                US$
+                <transition
+                  name="slide-fade"
+                  mode="out-in"
+                >
+                  <span :key="item.currentPrice">
+                    {{ currencyFormatter(item.currentPrice.toString(), 'USD', 4) }}
+                  </span>
+                </transition>
               </td>
               <td
                 class="hidden text-center md:block"
                 :class="[isPositive(item.priceChangePercentage24h) ? 'text-green-400' : 'text-red-400']"
               >
-                {{ item.priceChangePercentage24h.toFixed(4) }} %
+                <transition
+                  name="slide-fade"
+                  mode="out-in"
+                >
+                  <span :key="item.priceChangePercentage24h"> {{ item.priceChangePercentage24h.toFixed(4) }} % </span>
+                </transition>
               </td>
             </tr>
           </tbody>
@@ -93,3 +132,18 @@
     </div>
   </div>
 </template>
+<style lang="css" scoped>
+  .slide-fade-enter-active {
+    transition: all 0.3s ease-out;
+  }
+
+  .slide-fade-leave-active {
+    transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  }
+
+  .slide-fade-enter-from,
+  .slide-fade-leave-to {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+</style>

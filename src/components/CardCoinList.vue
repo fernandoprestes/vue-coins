@@ -1,28 +1,53 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script lang="ts" setup>
-  import { inject, onMounted, reactive } from 'vue';
-  import type SimpleService from '~/services/SimpleService';
+  import { inject, onMounted, onUnmounted, reactive } from 'vue';
   import CardCoinItem from './CardCoinItem.vue';
+  import type { ICoin } from '~/@types/ICoin';
+  import type SimpleService from '~/services/SimpleService';
+
+  const MILI_SEC = 60000 * 5; // 5 minutes
 
   const simpleService = inject('simpleService') as SimpleService;
 
-  const ids = ['bitcoin', 'ethereum', 'cardano', 'terra-luna-2', 'solana', 'polkadot', 'dacxi'];
+  const ids = ['ethereum', 'cardano', 'terra-luna-2', 'solana', 'dacxi', 'cosmos'];
   const currencies = ['usd', 'brl'];
   const query = `ids=${ids}&vs_currencies=${currencies}&precision=6`;
 
-  interface ICoins {
-    coinName: string;
-    currencies: { usd: number; brl: number };
-  }
+  const state = reactive({ coins: [] as ICoin[] });
 
-  const state = reactive({ coins: [] as ICoins[] });
+  const generateUUID = () => {
+    return Math.random().toString(36).substring(2, 15);
+  };
 
-  onMounted(async () => {
+  const fetchCoins = async () => {
+    state.coins = [];
     const response = Object.entries(await simpleService.getSimplePrice(query));
     response.forEach((item: [string, any]) => {
-      state.coins.push({ coinName: item[0], currencies: item[1] });
+      state.coins.push({ id: generateUUID(), coinName: item[0], currencies: item[1] });
     });
     state.coins.sort((a, b) => (a.coinName > b.coinName ? 1 : b.coinName > a.coinName ? -1 : 0));
+  };
+
+  const updateCoins = async () => {
+    const response = Object.entries(await simpleService.getSimplePrice(query));
+    response.sort().forEach((item: [string, any], index) => {
+      if (item[0] === state.coins[index].coinName) {
+        state.coins[index] = {
+          ...state.coins[index],
+          currencies: item[1],
+        };
+      }
+    });
+  };
+
+  const updateCoinsPrice = setInterval(updateCoins, MILI_SEC);
+
+  onMounted(async () => {
+    await fetchCoins();
+  });
+
+  onUnmounted(() => {
+    clearInterval(updateCoinsPrice);
   });
 </script>
 
@@ -31,11 +56,9 @@
     class="mx-auto grid h-[416px] max-w-[1330px] gap-4 overflow-auto px-4 sm:grid-cols-2 md:flex md:h-auto md:flex-row md:py-4 md:px-0"
   >
     <CardCoinItem
-      v-for="(item, index) in state.coins"
-      :key="index"
-      :coin-name="item.coinName"
-      :coin-currency-brl="item.currencies.brl"
-      :coin-currency-usd="item.currencies.usd"
+      v-for="item in state.coins"
+      :key="item.id"
+      :coin="item"
     />
   </div>
 </template>
