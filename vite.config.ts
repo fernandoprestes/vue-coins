@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 import path from 'path';
 import vue from '@vitejs/plugin-vue';
 
@@ -14,6 +14,13 @@ export default defineConfig({
   resolve: {
     alias: {
       '~/': `${PATH_SRC}/`,
+    },
+  },
+  test: {
+    include: ['test/**/*.test.ts', 'src/**/*.test.ts'],
+    environment: 'jsdom',
+    deps: {
+      inline: ['@vue', '@vueuse'],
     },
   },
 });
