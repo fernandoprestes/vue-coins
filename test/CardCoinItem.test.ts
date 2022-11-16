@@ -2,6 +2,7 @@ import { describe, expect, test } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
 
 import CardCoinItem from '~/components/CardCoinItem.vue';
+import type { ICoin } from '~/@types/ICoin';
 
 describe('CardCoinItem', () => {
   const cardItem = {
@@ -13,8 +14,8 @@ describe('CardCoinItem', () => {
     },
   };
   const wrapper = shallowMount(CardCoinItem, {
-    propsData: {
-      coin: cardItem,
+    props: {
+      coin: cardItem as ICoin,
     },
   });
 
