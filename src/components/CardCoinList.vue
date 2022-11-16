@@ -9,7 +9,7 @@
 
   const simpleService = inject('simpleService') as SimpleService;
 
-  const ids = ['ethereum', 'cardano', 'terra-luna-2', 'solana', 'dacxi', 'cosmos'];
+  const ids = ['bitcoin', 'ethereum', 'cardano', 'terra-luna-2', 'solana', 'dacxi', 'cosmos'];
   const currencies = ['usd', 'brl'];
   const query = `ids=${ids}&vs_currencies=${currencies}&precision=6`;
 

@@ -1,16 +1,44 @@
 # VueCoins
 
-Este projeto é uma aplicação que mostra o preços da criptomoeda usando a API [CoinGenko](https://www.coingecko.com/pt/api/documentation).
+Este projeto é uma aplicação que mostra em tempo real os preços das criptomoedas usando a API [CoinGenko](https://www.coingecko.com/pt/api/documentation).
 
-- [x] No topo abaixo do header conter 7 cards listado as moedas bitcoin, cardano, dacxi, ethereum, polkadoor, solana e terra luna 2 em reais e dólar.
-- [x] Ao pressionar um dos cards abrir modal para filtra por data a cotação em real e dólar da moeda.
-- [x] Lista em uma tabela o nome, o preço a a variação (%) das 50 moedas por capitalização
+- [x] No topo abaixo do header conter 7 cards listado as moedas `bitcoin`, `cardano`, `cosmos`, `dacxi`, `ethereum`, `solana` e `terra luna 2` com seus respectivos preços em reais e dólar.
+- [x] Ao pressionar um dos cards abrira um modal com a opção de filtra por uma data a cotação em real e dólar da moeda.
+- [x] Uma tabela com o nome, o preço e a variação (%) de 50 moedas por capitalização.
+- [x] Aplicação atualiza os preços das moedas dos cards e da tabela a cada 5 minutos `MILI_SEC = 60000 * 5`.
 
 ## Screenshots
 
+### FullScreen
+
 <img src='./public/screenshot/full-screen.png' alt="tela principal">
 
+### Modal filter
+
 <img src='./public/screenshot/modal.png' alt="exibição do modal">
+
+### Animation Update prices
+
+<img src='./public/screenshot/animation-update.gif' alt="exibição da animação do update na tela">
+
+## Estrutura de pastas
+
+- `src`
+  - `@types`: Tipagem dos objetos
+  - `assets/`: Recursos de img
+    - `img`: Upload de imagens
+  - `components/`: Componentes da aplicação
+    - `Dialog`: Componentes de dialog
+  - `composables`: Funções encapsuladas reutilizáveis
+  - `infra`: Axios Adapter
+  - `libs`: Biblioteca auxiliar
+  - `router`: Rotas das paginas
+  - `services`: Gateway da aplicação
+  - `views`: Páginas da aplicação
+- `.eslintrc.json`: Configurações do ESLint
+- `.prettierrc`: Configurações do Prettier
+- `tailwind.config.js`: Configurações do tailwind
+- `vite.config.js`: Configurações do vite
 
 ## Tecnologias
 
@@ -18,11 +46,11 @@ Este projeto é uma aplicação que mostra o preços da criptomoeda usando a API
 - [Vue3](https://vuejs.org/)
 - [Vue-Router](https://router.vuejs.org/)
 - [Typescript](https://www.typescriptlang.org/)
-- [tailwindcss](https://tailwindcss.com/)
+- [Tailwindcss](https://tailwindcss.com/)
 - [Eslint](https://eslint.org/)
 - [Eslint-plugin-vue](https://eslint.vuejs.org/)
 - [Prettier](https://prettier.io/)
-- [husky](https://typicode.github.io/husky/#/)
+- [Husky](https://typicode.github.io/husky/#/)
 - [Animate.css](https://animate.style/)
 - [CoinGecko](https://www.coingecko.com/pt/api/documentation)
 
