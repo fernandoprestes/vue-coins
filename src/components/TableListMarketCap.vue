@@ -6,7 +6,7 @@
 
   const coinsService = inject('coinsService') as CoinsService;
 
-  const query = `vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false`;
+  const query = `vs_currency=usd&order=market_cap_desc&per_page=50&page=1`;
 
   interface ICoinsList {
     id: string;
@@ -70,8 +70,12 @@
     <h2 class="bg-green-gradient bg-clip-text py-4 text-display-xs font-bold text-transparent">
       Tabela de preços das criptomoeda por capitalização de mercado
     </h2>
-    <div class="flex max-h-[520px] min-h-[500px] w-full flex-1 flex-col rounded-md border border-gray-600 p-4">
-      <div class="overflow-auto">
+    <div
+      class="flex max-h-[520px] min-h-[500px] w-full flex-1 flex-col rounded-md border border-gray-600 p-4 scrollbar-thin scrollbar-track-slate-700 scrollbar-thumb-slate-500"
+    >
+      <div
+        class="overflow-auto scrollbar-thin scrollbar-track-slate-700 scrollbar-thumb-slate-500 scrollbar-thumb-rounded-md"
+      >
         <table class="relative h-full w-full border-collapse">
           <thead class="sticky top-0 bg-background">
             <tr

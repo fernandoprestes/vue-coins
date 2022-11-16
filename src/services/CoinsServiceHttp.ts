@@ -6,12 +6,12 @@ export default class CoinsServiceHttp implements CoinsService {
   constructor(readonly httpClient: HttpClient) {}
 
   async getCoinsById(id: string) {
-    const response = await this.httpClient.get(`/coins/${id}`);
+    const response = await this.httpClient.get(`coins/${id}`);
     return response;
   }
 
   async getCoinsHistoricalByDate(id: string, date: string) {
-    const response = await this.httpClient.get(`/coins/${id}/history?date=${date}`);
+    const response = await this.httpClient.get(`coins/${id}/history?date=${date}`);
     return response;
   }
 

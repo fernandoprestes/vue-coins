@@ -53,7 +53,7 @@
 
 <template>
   <div
-    class="mx-auto grid h-[416px] max-w-[1330px] gap-4 overflow-auto px-4 sm:grid-cols-2 md:flex md:h-auto md:flex-row md:py-4 md:px-0"
+    class="mx-auto grid h-[416px] max-w-[1330px] gap-4 overflow-auto px-4 scrollbar-thin scrollbar-track-slate-700 scrollbar-thumb-slate-500 scrollbar-thumb-rounded-md sm:grid-cols-2 md:flex md:h-auto md:flex-row md:py-4 md:px-0"
   >
     <CardCoinItem
       v-for="item in state.coins"
