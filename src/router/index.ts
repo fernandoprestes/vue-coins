@@ -11,7 +11,7 @@ const routes: RouteRecordRaw[] = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.NODE_ENV === 'production' ? '/vue-coins ' : '/'),
+  history: createWebHistory(process.env.NODE_ENV === 'production' ? '/vue-coins' : '/'),
   routes,
 });
 
