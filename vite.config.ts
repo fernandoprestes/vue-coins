@@ -6,7 +6,7 @@ const PATH_SRC = path.resolve(__dirname, './src');
 
 export default defineConfig({
   plugins: [vue()],
-  base: '/vue-coins/',
+  base: '/vue-coins',
 
   server: {
     port: 4000,
