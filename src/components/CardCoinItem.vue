@@ -12,11 +12,11 @@
 
   const imgUrl = ref();
   watchEffect(async () => {
-    imgUrl.value = (await import(/* @vite-ignore */ `../assets/img/${props.coin.coinName}.png`)).default;
+    imgUrl.value = (await import(/* @vite-ignore */ `../assets/img/${props.coin.name}.png`)).default;
   });
 
   function handleOpenDialog() {
-    open({ component: 'DialogHistoricCoin', props: { id: props.coin.coinName } });
+    open({ component: 'DialogHistoricCoin', props: { id: props.coin.name } });
   }
 </script>
 
@@ -30,10 +30,10 @@
       <img
         class="h-8 w-8"
         :src="imgUrl"
-        :alt="`${coin.coinName} coin`"
-        :title="`${coin.coinName} coin`"
+        :alt="`${coin.name} coin`"
+        :title="`${coin.name} coin`"
       />
-      <h2 class="text-2xl capitalize">{{ coin.coinName.replaceAll('-', ' ') }}</h2>
+      <h2 class="text-2xl capitalize">{{ coin.name.replaceAll('-', ' ') }}</h2>
     </div>
     <div class="flex flex-col font-bold">
       <div

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { inject, onMounted, reactive, ref, watch } from 'vue';
   import { currencyFormatter } from '~/composables/useFormatter';
+  import { shortDateNow } from '~/composables/useDate';
   import type CoinsService from '~/services/CoinsService';
   import Loading from '../Loading.vue';
 
@@ -17,35 +18,29 @@
     isLoadingContent: true,
     isValidDateRange: true,
     isLoadingUpdate: false,
-    date: new Date().toLocaleString('pt-BR', { dateStyle: 'short' }).replaceAll('/', '-'),
-    inputDateSearch: new Date()
-      .toLocaleString('pt-BR', { dateStyle: 'short' })
-      .replaceAll('/', '-')
-      .split('-')
-      .reverse()
-      .join('-'),
+    shortDate: shortDateNow(),
+    inputDateSearch: shortDateNow().split('-').reverse().join('-'),
     coin: {
       name: '',
       symbol: '',
       image: '',
-      current_price: {
-        brl: 0,
-        usd: 0,
-      },
+      currentPriceBrl: 0,
+      currentPriceUsd: 0,
     },
   });
 
   async function findOneCoinHisticalByDate() {
     state.isLoadingContent = true;
-    const { name, symbol, image, market_data } = await coinsService.getCoinsHistoricalByDate(props.data.id, state.date);
+    const { name, symbol, image, market_data } = await coinsService.getCoinsHistoricalByDate(
+      props.data.id,
+      state.shortDate,
+    );
     state.coin = {
       name,
       symbol,
       image: image.small,
-      current_price: {
-        brl: market_data.current_price.brl,
-        usd: market_data.current_price.usd,
-      },
+      currentPriceBrl: market_data.current_price.brl,
+      currentPriceUsd: market_data.current_price.usd,
     };
     state.isLoadingContent = false;
   }
@@ -53,13 +48,11 @@
   async function updateCurrentPrice() {
     state.isValidDateRange = false;
     state.isLoadingUpdate = true;
-    const { market_data } = await coinsService.getCoinsHistoricalByDate(props.data.id, state.date);
+    const { market_data } = await coinsService.getCoinsHistoricalByDate(props.data.id, state.shortDate);
     state.coin = {
       ...state.coin,
-      current_price: {
-        brl: market_data.current_price.brl,
-        usd: market_data.current_price.usd,
-      },
+      currentPriceBrl: market_data.current_price.brl,
+      currentPriceUsd: market_data.current_price.usd,
     };
     state.isValidDateRange = true;
     state.isLoadingUpdate = false;
@@ -76,8 +69,7 @@
         state.isLoadingUpdate = false;
         return;
       }
-      const newDate = state.inputDateSearch.toString().split('-').reverse().join('-');
-      state.date = newDate;
+      state.shortDate = state.inputDateSearch.toString().split('-').reverse().join('-');
       updateCurrentPrice();
     },
   );
@@ -121,10 +113,10 @@
         class="flex flex-col"
       >
         <div class="flex justify-between text-lg">
-          R$ <span> {{ currencyFormatter(state.coin.current_price.brl.toString(), 'BRL') }}</span>
+          R$ <span> {{ currencyFormatter(state.coin.currentPriceBrl.toString(), 'BRL') }}</span>
         </div>
         <div class="flex justify-between">
-          US$ <span>{{ currencyFormatter(state.coin.current_price.usd.toString(), 'USD') }}</span>
+          US$ <span>{{ currencyFormatter(state.coin.currentPriceUsd.toString(), 'USD') }}</span>
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ import type { ICoin } from '~/@types/ICoin';
 describe('CardCoinItem', () => {
   const cardItem = {
     id: '1234',
-    coinName: 'bitcoin',
+    name: 'bitcoin',
     currencies: {
       usd: 1.225413,
       brl: 5.658745,

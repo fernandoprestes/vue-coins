@@ -23,15 +23,15 @@
     state.coins = [];
     const response = Object.entries(await simpleService.getSimplePrice(query));
     response.forEach((item: [string, any]) => {
-      state.coins.push({ id: generateUUID(), coinName: item[0], currencies: item[1] });
+      state.coins.push({ id: generateUUID(), name: item[0], currencies: item[1] });
     });
-    state.coins.sort((a, b) => (a.coinName > b.coinName ? 1 : b.coinName > a.coinName ? -1 : 0));
+    state.coins.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
   };
 
   const updateCoins = async () => {
     const response = Object.entries(await simpleService.getSimplePrice(query));
     response.sort().forEach((item: [string, any], index) => {
-      if (item[0] === state.coins[index].coinName) {
+      if (item[0] === state.coins[index].name) {
         state.coins[index] = {
           ...state.coins[index],
           currencies: item[1],

@@ -1,5 +1,5 @@
 export interface ICoin {
   id: string;
-  coinName: string;
+  name: string;
   currencies: { usd: number; brl: number };
 }
