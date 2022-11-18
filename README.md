@@ -40,6 +40,22 @@ Este projeto é uma aplicação que mostra em tempo real os preços das criptomo
 - `tailwind.config.js`: Configurações do tailwind
 - `vite.config.js`: Configurações do vite
 
+## Iniciando o projeto
+
+```bash
+# clone project
+$ git clone https://github.com/fernandoprestes/vue-coins.git
+
+# go to folder
+$ cd vue-coins
+
+# install dependencies
+$ yarn install
+
+# serve with hot reload at localhost:4000
+$ yarn dev
+```
+
 ## Tecnologias
 
 - [Vite](https://vitejs.dev/)
