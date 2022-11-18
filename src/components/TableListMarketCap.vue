@@ -89,21 +89,21 @@
           </thead>
           <tbody>
             <tr
-              v-for="(item, index) in state.coins"
-              :key="index"
+              v-for="coin in state.coins"
+              :key="coin.id"
               class="my-4 grid grid-flow-col grid-cols-[_0.1fr,_0.5fr,_0.4fr] items-center md:grid-cols-[80px,repeat(2,minmax(175px,_1fr)),150px]"
             >
-              <td>{{ item.marketCapRank }}</td>
+              <td>{{ coin.marketCapRank }}</td>
               <td class="flex items-center gap-4">
                 <img
                   class="h-6 w-6"
-                  :src="item.image"
-                  :alt="item.name"
+                  :src="coin.image"
+                  :alt="coin.name"
                 />
                 <div>
-                  {{ item.name }}
+                  {{ coin.name }}
                   <span class="rounded-md bg-slate-400 px-2 text-xs font-thin uppercase">
-                    {{ item.symbol }}
+                    {{ coin.symbol }}
                   </span>
                 </div>
               </td>
@@ -113,20 +113,20 @@
                   name="slide-fade"
                   mode="out-in"
                 >
-                  <span :key="item.currentPrice">
-                    {{ currencyFormatter(item.currentPrice.toString(), 'USD', 4) }}
+                  <span :key="coin.currentPrice">
+                    {{ currencyFormatter(coin.currentPrice.toString(), 'USD', 4) }}
                   </span>
                 </transition>
               </td>
               <td
                 class="hidden text-center md:block"
-                :class="[isPositive(item.priceChangePercentage24h) ? 'text-green-400' : 'text-red-400']"
+                :class="[isPositive(coin.priceChangePercentage24h) ? 'text-green-400' : 'text-red-400']"
               >
                 <transition
                   name="slide-fade"
                   mode="out-in"
                 >
-                  <span :key="item.priceChangePercentage24h"> {{ item.priceChangePercentage24h.toFixed(4) }} % </span>
+                  <span :key="coin.priceChangePercentage24h"> {{ coin.priceChangePercentage24h.toFixed(4) }} % </span>
                 </transition>
               </td>
             </tr>
