@@ -1,22 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import bus from '~/libs/bus';
+import { useEventBus } from '@vueuse/core';
 
 const EVENT_NAME = 'modal:toggle';
 
+const bus = useEventBus<any>(EVENT_NAME);
+
 export default function useModal() {
   function open(payload = {}) {
-    bus.emit(EVENT_NAME, { status: true, ...payload });
+    bus.emit({ status: true, ...payload });
   }
 
   function close(payload = {}) {
-    bus.emit(EVENT_NAME, { status: false, ...payload });
+    bus.emit({ status: false, ...payload });
   }
 
   function listen(fn: any) {
-    bus.on(EVENT_NAME, fn);
+    bus.on(fn);
   }
   function off(fn: any) {
-    bus.off(EVENT_NAME, fn);
+    bus.off(fn);
   }
 
   return {
